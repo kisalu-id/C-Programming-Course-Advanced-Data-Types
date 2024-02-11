@@ -28,61 +28,106 @@ Output:
 01/01/2019 */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 struct date {
-        int year;
-        int month;
-        int day;
-    };
+    int day;
+    int month;
+    int year;
+};
 
-/* function prototypes */
 void printDate(struct date);
 void readDate(struct date *);
 struct date advanceDay(struct date); 
+void errorMsg();
 
 int main(void) {
-	struct date today, tomorrow;
-	readDate(&today);
-	printDate(today);
-	tomorrow = advanceDay(today);
-	printDate(tomorrow);
-	return 0;
+ struct date today, tomorrow;
+ 
+ printf("What is the date today? (Format is DD MM YYYY)\n");
+ readDate(&today);
+ tomorrow = advanceDay(today);
+ printf("Tomorrow is:\n");
+ printDate(tomorrow);
+ printf("Today is:\n");
+ printDate(today);
+ return 0;
 }
 
 /* add your function definitions here */
 
 void readDate(struct date *dateptr) {
-    scanf("%4d %02d %02d", &(*dateptr).year, &(*dateptr).month, &(*dateptr).day);
+    //changed format from what asked in exercise to more traditional for me: DD/MM/YYYY
+    scanf("%d %d %d", &dateptr->day, &dateptr->month, &dateptr->year); //same as &(*dateptr).month
 }
 
 void printDate(struct date x) {
-    printf("%02d/%02d/%04d", x.month, x.day, x.year);
+    printf("%02d/%02d/%04d\n", x.day, x.month, x.year);
 }
 
-struct date advanceDay(struct date a) {
-    struct date b;
-    int monthMax;
-    if ((a.year % 4) != 0) {
-        if (a.month > 0 && a.month <13) {
-            if (a.month = 04 || 06 || 09 || 11) {
-                
-            }
-            else if (a.month = 02){
+struct date advanceDay(struct date today) {
+    int monthMax = -10;
+    //for typing faster and saving today's values:
+    int d = today.day;
+    int m = today.month;
+    int y = today.year;
+    struct date tomorrow;
+    
+    //no negative ints allowed here >:(
+    if ( (m<1) || (d<1) || (y<1) ) {
+        printf("You cant't count dates with negative integers.");
+        errorMsg();
+    }
+    
+    //define max days in month
+    else if (m == 2) {
+            if ((y % 4) != 0) {
                 monthMax = 28;
+            } else {
+                monthMax = 29;
             }
-            else { //for months with 31 days
-                
-            }
-        }
-        else {
-            printf("Incorrect month\n")
-        }
+    }
+    else if ( (m==4) || (m== 6) || (m==9) || (m==11) ) {
+        monthMax = 30;
+    }
+    else if ( (m==1) || (m==3) || (m==5) || (m==7) || (m==8) || (m==10) || (m==12) ) {
+        monthMax = 31;
+    } else {
+    printf("Incorrect month.");
+        errorMsg();
     }
     
-    
-    else if ((a.year % 4) == 0) {
-        //same but (month == 02) = 29;
-        
+    //upd day, take care of day exceeding monthMax
+    if (d < monthMax && d > 0) {
+        d++;
     }
-    return struct date b;
+    else if (d == monthMax) {
+        d = 1;
+        if (m==12) {
+            m = 1;
+            y++;
+        } else {
+            m++;
+        }
+    } else {
+        printf("Incorrect day.");
+        errorMsg();
+    }
+    
+    if (y>9999) {
+        printf("C'mon\nI'm just a compooter, I can't deal with 5-digit years TwT");
+        errorMsg();
+    }
+    
+    //assign result to other structure element so initial values from today will stay    
+    tomorrow.day = d;
+    tomorrow.month = m;
+    tomorrow.year = y;
+    return tomorrow;
+}
+
+//to not copypaste
+void errorMsg() {
+    printf("\nTerminating the program.");
+    exit(0);
 }

@@ -27,9 +27,10 @@ struct student {
 };
 
 struct student *createStudent(char studentName[], int studentAge);
-void copyStr(char studentName[50], struct student *ptr);
+void copyStr(char *, char *);
 
 int main(void) {
+    //! showMemory(start=65520)
     struct student *studptr;
     int myAge;
     char myName[50];
@@ -42,18 +43,19 @@ int main(void) {
 
 
 struct student *createStudent(char studentName[], int studentAge) {
-    struct student *ptr;
-    ptr = (struct student *) malloc(sizeof(struct student));
+    struct student *ptr = (struct student *) malloc(sizeof(struct student));
     ptr->age = studentAge;
-    copyStr(&studentName[50], ptr);
+    copyStr(studentName, ptr->name);
     //ptr->name = studentName[50];
     ptr->next = NULL;
     return ptr;
 }
 
 //
-void copyStr(char studentName[50], struct student *ptr) {
-    for (int i=0; i<50; i++) {
-       ptr->name[i] = studentName[i];
+void copyStr(char *a, char *b) {
+    int i;
+    for (i=0; a[i] != '\0'; i++) {
+       b[i] = a[i];
     }
+    b[i] = '\0';
 }

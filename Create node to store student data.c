@@ -1,19 +1,13 @@
 /*
-You would like to store student data (for each student, their name and age) in a linked list of students. You are given the following structure to store each student's information. Please do not modify this structure
+In this task you will continue working on the linked list of students in which you would like to store, for each student, their name and age. As before you are provided with some code that you should not modify:
 
-Your first task is to write a function createStudent() that takes as inputs a string (namely a student's name) and an integer (their age) and that returns a pointer to a struct student which stores this information. Your function should dynamically allocate the memory required for this struct student and then write the student's name and age into this newly allocated memory. 
+    A structure definition for the storage of each student's information.
+    A main() function to test your code. 
+    Prototypes for the functions createStudent() (from the previous task) and append() (from the current task).
 
-Examples
-Input:
-Petra 25
+You will need the function definition (from the previous task) for createStudent(), as well as any other functions you added, such as copyStr() for example. If you were unable to solve the previous task you have the option to be given the code for the createStudent() function (see the quiz preceding this task) so that you can work on the current task.
 
-Output:
-New student created: Petra is 25 years old.   
-
-Input:
-Remi 18
-Output:
-New student created: Remi is 18 years old.   
+Your new task is to write a function append() which takes as input two pointers: the first pointer holds the address of the current end of the linked list of students, the second pointer points to a newly created student. Your function should append this new student to the linked list and return the address (a struct student *) of the new end of the list. 
 
 Warning: You will be graded on your output, so do not include any print statements that prompt a user for input.*/
 
@@ -27,35 +21,55 @@ struct student {
 };
 
 struct student *createStudent(char studentName[], int studentAge);
+struct student *append(struct student * end, struct student * newStudptr); 
+/* add other prototypes here if needed */
 void copyStr(char *, char *);
 
 int main(void) {
-    //! showMemory(start=65520)
-    struct student *studptr;
-    int myAge;
-    char myName[50];
-    scanf("%s %d", myName, &myAge);
-    studptr = createStudent(myName, myAge);
-    printf("New student created: %s is %d years old.\n", studptr->name, studptr->age);
-    free(studptr);
+    struct student *start, *newStudptr, *end, *tmp;
+    int ageP, ageR, ageM;
+
+    scanf("%d %d %d", &ageP, &ageR, &ageM);
+    start = createStudent("Petra", ageP);
+    end = start;
+    newStudptr = createStudent("Remi", ageR);
+    end = append(end, newStudptr);
+    newStudptr = createStudent("Mike", ageM);
+    end = append(end, newStudptr);
+
+    printf("%s is %d years old.\n", start->name, start->age);
+    printf("%s is %d years old.\n", start->next->name, start->next->age);
+    printf("%s is %d years old.\n", start->next->next->name, start->next->next->age);
+
+    tmp = start->next;
+    free(start);
+    start = tmp;
+    tmp = start->next;
+    free(start);
+    free(tmp);
+
     return 0;
 }
 
-
+/* Place your function definitions here. Be sure to include the definition for 
+   createStudent() and any other functions you created for the previous task. */
 struct student *createStudent(char studentName[], int studentAge) {
     struct student *ptr = (struct student *) malloc(sizeof(struct student));
     ptr->age = studentAge;
     copyStr(studentName, ptr->name);
-    //ptr->name = studentName[50];
     ptr->next = NULL;
     return ptr;
 }
 
-//
 void copyStr(char *a, char *b) {
     int i;
     for (i=0; a[i] != '\0'; i++) {
        b[i] = a[i];
     }
     b[i] = '\0';
+}
+
+struct student *append(struct student * end, struct student * newStudptr) {
+    end->next = newStudptr;
+    return(end->next);
 }

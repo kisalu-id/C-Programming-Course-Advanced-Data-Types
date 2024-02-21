@@ -16,8 +16,7 @@ void freeNumber(struct digit *);
 struct digit *readNumber(void); 
 int divisibleByThree(struct digit *);
 int changeThrees(struct digit *);
-
-//other functions
+//my other functions
 struct digit * createCopy(struct digit *);
 struct digit * sortCopy(struct digit *);
 struct digit * insertIntoSorted(struct digit *, struct digit *);
@@ -130,8 +129,6 @@ int countRedun(struct digit *start) {
     return (sum);
 }
 
-
-
 struct digit * createCopy(struct digit *start) {
     struct digit *ptr = start; //ptr is for going through the list
     struct digit *sortedStart = NULL; //sorted copy
@@ -143,13 +140,12 @@ struct digit * createCopy(struct digit *start) {
         }
         while (ptr != 0) {
             newDigit = createDigit(ptr->num);
-            sortedStart = insertAtFront(sortedStart, newDigit);
+            sortedStart = insertIntoSorted(sortedStart, newDigit);
             ptr = ptr->next;
     }
     return (sortCopy(sortedStart));
 }
 
-//sort copy
 struct digit * sortCopy(struct digit *start) {
     struct digit *ptr = start; //ptr is for going through the list
     struct digit *sortedStart = NULL; //sorted copy
@@ -166,7 +162,6 @@ struct digit * sortCopy(struct digit *start) {
     return(sortedStart);
 }
 
-
 struct digit * insertIntoSorted(struct digit *start, struct digit *newDig) {
     struct digit *ptr = start;
     struct digit *prev = NULL;
@@ -175,7 +170,8 @@ struct digit * insertIntoSorted(struct digit *start, struct digit *newDig) {
         ptr = ptr->next;
     }
     if (prev == NULL) {
-        start = insertAtFront(start, newDig);
+        newDig->next = start;
+        start = newDig;
     } else {
         prev->next = newDig;
         newDig->next = ptr;
@@ -186,7 +182,15 @@ struct digit * insertIntoSorted(struct digit *start, struct digit *newDig) {
 
 int countRed (struct digit *start) {
     int sum = 0;
+    struct digit *ptr = start;
+    struct digit *next = ptr->next;
     //when next num == num, counter ++
-    
+    while (ptr != 0) {
+        if (ptr->num == next->num) {
+            sum ++;
+        }
+        ptr = ptr->next;
+        next = ptr->next;
+    }
     return sum;
 }

@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-int calculateLength(char[]);
+int validateWord(char[]);
+int countScore(char[]);
+void whoWon (int, int);
+
 
 typedef struct {
     char let;
@@ -16,22 +19,30 @@ LetValPair pairs[] = {
 int main(){
   char p1Word[101], p2Word[101];
   int p1Score, p2Score;
+  
   printf("Player 1, enter your word:\n");
   scanf("%s", p1Word);
   printf("Player 2, enter your word:\n");
   scanf("%s", p2Word);
   
-  p1Score = calculateLength(p1Word);
-  p2Score = calculateLength(p2Word);
+  if (validateWord(p1Word) && validateWord(p2Word)) {
   
-  printf("Score of player 1: %d\n", p1Score);
-  printf("Score of player 2: %d\n", p2Score);
+    p1Score = countScore(p1Word);
+    p2Score = countScore(p2Word);
   
+ 	printf("Score of player 1: %d\n", p1Score);
+    printf("Score of player 2: %d\n", p2Score);  
+    whoWon(p1Score, p2Score);
+    
+  } else {
+    printf("Invalid word. Please enter only capital letters.\n");
+    return 1;
+  }
   return 0;
 }
   
   
-int calculateLength (char word[])  {
+int countScore (char word[])  {
   int counter = 0;
   int wLength = strlen(word);
   
@@ -45,3 +56,26 @@ int calculateLength (char word[])  {
   }
   return counter; 
  }
+
+void whoWon (int s1, int s2) {
+	 if (s1 > s2) {
+	  	printf("Player 1 won! \n");
+	 }
+	 else if (s1 < s2) {
+	 	 printf("Player 2 won! \n");
+	 } else {
+	   printf("Tie!\n");
+	 }
+}
+
+int validateWord (char word[]) {
+	 for (int i=0; word[i] != '\0'; i++) {
+	   if (word[i] < 'A' || word[i] > 'Z') {
+	     return 0;
+	   }
+	 }
+	 return 1;
+}
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

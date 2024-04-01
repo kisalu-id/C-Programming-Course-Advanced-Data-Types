@@ -68,14 +68,37 @@ void whoWon (int s1, int s2) {
 	 }
 }
 
-int validateWord (char word[]) {
-	 for (int i=0; word[i] != '\0'; i++) {
-	   if (word[i] < 'A' || word[i] > 'Z') {
-	     return 0;
-	   }
-	 }
-	 return 1;
+validateWord (char word[]) {
+    regex_t regex; //regex_t is a type that holds compiled regex
+    int regexCompilation; //to store results of compiling/executing the regex
+    int regexExecution;
+
+    //compile regex pattern
+    regexCompilation = regcomp(&regex, "^A-Z]+$", REG_EXTENDED); //compiles the refer pattern into regex structure
+
+    if(regexCompilation) {
+        fprintf(stderr, "Regex compilation failed\n") ;
+         return 0;
+    }
+    regexExecution = regexec(&regex, input, 0, NULL, 0);
+    regfree(&regex);
 }
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 
+
+/* File streams -
+channels to transfer data, between the program and files OR devices (console, for example)
+File streams are typically used for reading data from files (stdin) or writing data to files (stdout or a custom file).
+When working with file streams, you need to explicitly open the file using fopen() and close it using fclose().
+
+
+3 file streams:
+stdin (read input from user/program) ;
+stdout (output, to console by default) ;
+stderr (for errors/diagnostic messages; is unbuffered, typically connected to a console) 
+
+fprintf - formatted print, writes formatted to a specific output stream; takes 3 arguments:
+output stream (stdout/stderr/file stream);
+format string to specify the format of the output;
+additional arguments containing the data to be formatted and written to the output stream
+*/
+
+//regexec()  used to execute a compiled regular expression pattern against a given input string and determine if there is a match

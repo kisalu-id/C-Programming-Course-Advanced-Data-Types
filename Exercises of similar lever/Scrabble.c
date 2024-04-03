@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <regex.h>
 
 int validateWord(char[]);
 int countScore(char[]);
@@ -11,7 +12,7 @@ typedef struct {
     int val;
 } LetValPair;
 
-LetValPair pairs[] = {
+LetValPair pairs[] = { //mapping each letter to its score; I could do it more efficiently with  ASCII codes but I want to practice sctuctures
     {'A', 1}, {'B', 3}, {'C', 3}, {'D', 2}, {'E', 1}, {'F', 4}, {'G', 2}, {'H', 4}, {'I', 1}, {'J', 8}, {'K', 5}, {'L', 1}, {'M', 3}, {'N', 1}, {'O', 1}, {'P', 3}, {'Q', 10}, {'R', 1}, {'S', 1}, {'T', 1}, {'U', 1}, {'V', 4}, {'W', 4}, {'X', 8},  {'Y', 4}, {'Z', 10}
 };
 
@@ -30,7 +31,7 @@ int main(){
     p1Score = countScore(p1Word);
     p2Score = countScore(p2Word);
   
- 	printf("Score of player 1: %d\n", p1Score);
+   	printf("Score of player 1: %d\n", p1Score);
     printf("Score of player 2: %d\n", p2Score);  
     whoWon(p1Score, p2Score);
     
@@ -68,23 +69,44 @@ void whoWon (int s1, int s2) {
 	 }
 }
 
-validateWord (char word[]) {
+int validateWord (char word[]) {
     regex_t regex; //regex_t is a type that holds compiled regex
     int regexCompilation; //to store results of compiling/executing the regex
     int regexExecution;
 
     //compile regex pattern
-    regexCompilation = regcomp(&regex, "^A-Z]+$", REG_EXTENDED); //compiles the refer pattern into regex structure
+    regexCompilation = regcomp(&regex, "^[A-Z]+$", REG_EXTENDED); //compiles the refer pattern into regex structure
 
     if(regexCompilation) {
         fprintf(stderr, "Regex compilation failed\n") ;
          return 0;
     }
-    regexExecution = regexec(&regex, input, 0, NULL, 0);
+    
+    //comparing
+    regexExecution = regexec(&regex, word, 0, NULL, 0);
     regfree(&regex);
+    
+    if (regexExecution == 0) {
+   	    //printf("Pattern found.\n");
+    	   return 1;
+    } //else if pattern not found
+    else if (regexExecution == REG_NOMATCH) {
+        fprintf(stderr, "Pattern not found.\n");
+    	} else {
+    		   fprintf(stderr, "An error occurred.\n") ; 
+    	}
+    	
+    return 0; //unless successful 
 }
 
-/* File streams -
+/* 
+class is a blueprint for creating objects, defines the structure and behavior of objects inside it
+this one holds score for each letter
+
+constructor - special method within a class, automatically called when a new object of the class is created.
+used to initialize the object's properties, perform/setup tasks for the object to function properly
+
+File streams -
 channels to transfer data, between the program and files OR devices (console, for example)
 File streams are typically used for reading data from files (stdin) or writing data to files (stdout or a custom file).
 When working with file streams, you need to explicitly open the file using fopen() and close it using fclose().
@@ -99,6 +121,11 @@ fprintf - formatted print, writes formatted to a specific output stream; takes 3
 output stream (stdout/stderr/file stream);
 format string to specify the format of the output;
 additional arguments containing the data to be formatted and written to the output stream
-*/
 
-//regexec()  used to execute a compiled regular expression pattern against a given input string and determine if there is a match
+regexec()  used to execute a compiled regular expression pattern against a given input string and determine if there is a match
+
+
+*/
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

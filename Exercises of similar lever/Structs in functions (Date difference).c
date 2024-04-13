@@ -1,3 +1,4 @@
+
 //A program that counts how much days and DMY passed between two dates
 //inspired by my other program, that counts what day is next
 
@@ -9,6 +10,8 @@ struct date {
     int month;
     int year;
 };
+
+int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
 
 void printDate(struct date);
 void readDate(struct date *);
@@ -51,7 +54,15 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     }
     
     //add days and monthsfor the incomplete year
-    //array for month that has the amount of days? 
+    for (int month = date1->month + 1; month <= 12; month++) {
+        	daysPassed -= daysInMonth[month - 1];
+        	if (month == 2 && isLeapYear(date1->year)) //account for leap years 
+            	daysPassed--;
+        	}
+         
+    
+    
+  
     
     return daysPassed;
 }

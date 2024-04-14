@@ -27,10 +27,10 @@ int main() {
     printf("Enter the second date (Format: DD MM YYYY): ");
     readDate(&date2);
     
-    int daysPassedInt = daysPassedFunct(date1, date2);
+    int daysPassedInt = daysPassedFunct(&date1, &date2);
     printf(" Between these dates passed: %d days/n", daysPassedInt);
     
-    struct date *difference = daysToYMD(date1, date2);
+    struct date *difference = daysToYMD(&date1, &date2);
     printf(" Between these dates passed: %d years, %d months, %d days./n", difference->year, difference->month, difference->day);
     
     return 0;
@@ -49,33 +49,44 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
 	   int yearsPassed = date2->year - date1->year; //count how much years passed
 	   for (int yeari = date1->year; yeari < date2->year; yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
-        daysPassed += isLeapYear(yeari) ? 366 : 365;
-            
+        daysPassed += isLeapYear(yeari) ? 366 : 365;     
     }
     
-    //add days and monthsfor the incomplete year
+    //add days and monthsfor the incomplete year of date1; -1 everywhere for daysInMonth
     for (int month = date1->month + 1; month <= 12; month++) {
         	daysPassed -= daysInMonth[month - 1];
-        	if (month == 2 && isLeapYear(date1->year)) //account for leap years 
+        	if (month == 2 && isLeapYear(date1->year)) {//account for leap years 
             	daysPassed--;
         	}
-         
+     }
+         //adjusting for the incomplete month.
+     daysPassed = daysPassed - (daysInMonth[date1->month - 1] - date1->day); 
     
-    
-  
+    //add days for incomplete year of date2
+    for (int month = 1; month < date2->month; month++) {
+    	    daysPassed += daysInMonth[month -1]; //-1 here and earlier bc array starts at index 0
+    	    if (month == 2 && isLeapYear(date1->year)) {//account for leap years 
+            	daysPassed++;
+        	}
+    	    
+    	}
+    daysPassed += date2->day;
     
     return daysPassed;
 }
 
 
 struct date* daysToYMD(struct date *date1, struct date *date2) {
-
-return
+    
+//return
 }
 
 int isLeapYear(int x) { //!! read how leap years are counted
-    return (x % 4 == 0) ? 1 : 0; //ternary conditional operator again
-            
+    return (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
+    /*According to the Gregorian calendar, most years divisible by 4 are leap years,
+    but not all. Years that are divisible by 100 are not leap years, except for years
+    that are also divisible by 400. */
+    
 }
 
 

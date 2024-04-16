@@ -55,27 +55,45 @@ void printDate(struct date x) {
 int daysPassedFunct(struct date *date1, struct date *date2) {
 	   int daysPassed = 0;
 	   
-	   //case 1: same date
+	   //easiest: same date
 	   if (date1->day == date2->day && date1->month == date2->month && date1->year == date2->year) {
         return daysPassed;
-    } //diff day, same month, same year
+    } 
     
-    else if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {
-        daysPassed = date2->day - date1->day;  
-    } //diff month, same year
-    else if (date1->month != date2->month && date1->year == date2->year) {
-        daysPassed = daysInMonth[date1->month -1] - date1->day + date2->day;
+    //diff day, same month, same year
+    if (date1->day != date2->day && date1->month ==date2->month && date1->year == date2->year) {  //maybe say if m=m y=y? 
+        daysPassed += date2->day - date1->day;  
+        printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
+    }
+    
+    //diff month, 1<2
+    if (date1->month < date2->month && date1->year <= date2->year) {
+        daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
         for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
         	    daysPassed += daysInMonth[monthi - 1];
         	}
+    printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
     }
-    	    
-   
+    
+    
+    //diff month, 1>2
+    if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
+        daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
+        //count I times
+        int j = 12 - date1->month + date2->month;
+        
+        for (int i; i <= j; i++) { //if month difference is >1
+        	    daysPassed -= daysInMonth[i - 1];
+        	}
+    printf("daysPassed,counted months, entered loop 2: %d\n", daysPassed); 	
+    } 
+    
+    
 	   
 	   for (int yeari = date1->year; yeari < date2->year; yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
-        daysPassed += isLeapYear(yeari) ? 366 : 365;     
-    }
+        daysPassed += (isLeapYear(yeari) && date1->month<=2)? 366 : 365;     
+    } //or here loop through the daysInMonth?? seems more reliable
     
     printf("daysPassed, counted years: %d\n", daysPassed);
     return daysPassed;

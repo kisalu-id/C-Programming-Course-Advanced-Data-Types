@@ -1,4 +1,3 @@
-
 //A program that counts how much days and DMY passed between two dates
 //inspired by my other program, that counts what day is next
 
@@ -42,7 +41,6 @@ int main() {
 }
 
 
-
 void readDate(struct date *x) {
     scanf("%d %d %d", &x->day, &x->month, &x->year);
 }
@@ -71,28 +69,28 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
         for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
         	    daysPassed += daysInMonth[monthi - 1];
-        	}
-    printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
+       	}
+        printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
     }
     
     
     //diff month, 1>2
     if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
         daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
-        //count I times
+       //count I times
        // int j = 12 - date1->month + date2->month;
         
         for (int i = date1->month; i < 12; i++) { //if month difference is >1
         	    daysPassed += daysInMonth[i];        //count until dec
              printf("daysPassed, loop2 count1: %d\n", daysPassed);
-        	}
+        }
         for (int i = 1; i < date2->month; i++) { //count up to date
         	    daysPassed += daysInMonth[i - 1];
         	    printf("daysPassed, loop2 count2: %d\n", daysPassed);
         	}
-    printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
-    daysPassed -= 365; //temporary crutch
-    printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
+        printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
+        daysPassed -= 365; //temporary crutch
+        printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
     } 
     
     
@@ -105,72 +103,20 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     printf("daysPassed, counted years: %d\n", daysPassed);
     return daysPassed;
 }
-    
-    /*
-    if (date1->year < date2->year) {
-    //add days and monthsfor the incomplete year of date1; -1 everywhere for daysInMonth
-    for (int month = date1->month; month < date2->month; month++) {
-    	     printf("daysPassed, will count month%d: current counter %d\n", month, daysPassed);
-     
-        	daysPassed -= daysInMonth[month - 1];
-        	if (month == 2 && isLeapYear(date1->year)) {//account for leap years 
-            	daysPassed--;
-        	}
-     }
-     
-     printf("daysPassed, counted months: %d\n", daysPassed);
-     
-         //adjusting for the incomplete month.
-         
-         daysPassed = daysPassed - (daysInMonth[(date1->month) - 1] - date1->day); 
-    }
-    
-    
-    
-    //the problem is: I need to make a coherent plan to handle days, moths and years. to not do bs if there's no difference in months/years
-    
-    
-    
-    
-    
-   //  daysPassed = daysPassed - (daysInMonth[date1->month - 1] - date1->day); 
-    printf("daysPassed days: %d\n", daysPassed);
-    
-    //add days for incomplete year of date2
-    for (int month = date1->month; date1->month < date2->month; month++) {
-    	    daysPassed += daysInMonth[month -1]; //-1 here and earlier bc array starts at index 0
-    	    if (month == 2 && isLeapYear(date2->year)) {//account for leap years 
-            	daysPassed++;
-        	}
-    	   
-    	}
-    	daysPassed = daysPassed - date1->day;
-    	printf("date 2 daysPassed months: %d\n", daysPassed);
-    daysPassed += date2->day;
-    printf("date 2 daysPassed days: %d\n", daysPassed);
-    
-    return daysPassed;
-}
-
-
-struct date* daysToYMD(struct date *date1, struct date *date2) {
-    
-//return
-}
-*/
 
 int isLeapYear(int x) {
-	   int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); 
-    return answer;}
+	   int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0);
+    printf("isLeapYear    : %d\n", answer);
+    return answer;
+}
     /*ternary conditional operator again
     According to the Gregorian calendar, most years divisible by 4 are leap years,
     but not all. Years that are divisible by 100 are not leap years, except for years
     that are also divisible by 400. */
     
-
-
-
-
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 
+/*
+struct date* daysToYMD(struct date *date1, struct date *date2) {
+    
+//return
+}
+*/

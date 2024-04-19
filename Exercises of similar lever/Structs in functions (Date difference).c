@@ -15,7 +15,7 @@ int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 void printDate(struct date);
 void readDate(struct date *);
 int daysPassedFunct(struct date *, struct date *);
-struct date* daysToYMD(struct date *, struct date *);//very unsure about structs as arguments and return value :/ we'll see
+struct date* daysToYMD(int, struct date*);//very unsure about structs as arguments and return value :/ we'll see
 int isLeapYear(int);
 
 int main() {
@@ -32,7 +32,10 @@ int main() {
     printDate(date2);
     
     int daysPassedInt = daysPassedFunct(&date1, &date2);
-    printf(" Between these dates passed: %d days\n", daysPassedInt);
+    printf("Between these dates passed: %d days\n", daysPassedInt);
+    
+    struct date *YMDpassed = daysToYMD(daysPassedInt, &YMDpassed);
+    printf("Between these dates passed: %d years, %d months, %d days\n", YMDpassed->year, YMDpassed->month, YMDpassed->day);
     
    // struct date *difference = daysToYMD(&date1, &date2);
   //  printf(" Between these dates passed: %d years, %d months, %d days./n", difference->year, difference->month, difference->day);
@@ -114,9 +117,20 @@ int isLeapYear(int x) {
     but not all. Years that are divisible by 100 are not leap years, except for years
     that are also divisible by 400. */
     
-/*
-struct date* daysToYMD(struct date *date1, struct date *date2) {
+
+struct date* daysToYMD(int daysPassed, struct date *difference) {
+   // struct date *difference;
     
-//return
+    difference->year = daysPassed / 365;
+    daysPassed %= 365;
+    printf("Years: %d\n", difference->year);
+    
+    difference->month = daysPassed / 30;
+    daysPassed %= 30;
+    printf("Months: %d\n", difference->month);
+    
+    difference->day = daysPassed;
+    printf("Days: %d\n", difference->day);
+    
+    return difference;
 }
-*/

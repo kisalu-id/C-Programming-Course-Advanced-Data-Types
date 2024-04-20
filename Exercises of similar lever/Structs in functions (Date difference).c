@@ -15,11 +15,14 @@ int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 void printDate(struct date);
 void readDate(struct date *);
 int daysPassedFunct(struct date *, struct date *);
-struct date* daysToYMD(int, struct date*);//very unsure about structs as arguments and return value :/ we'll see
+void daysToYMD(int);
 int isLeapYear(int);
+float averageDays();
 
 int main() {
     struct date date1, date2;
+    
+    averageDays();
     
     printf("Enter the first date (Format: DD MM YYYY): ");
     readDate(&date1);
@@ -34,8 +37,8 @@ int main() {
     int daysPassedInt = daysPassedFunct(&date1, &date2);
     printf("Between these dates passed: %d days\n", daysPassedInt);
     
-    struct date *YMDpassed = daysToYMD(daysPassedInt, &YMDpassed);
-    printf("Between these dates passed: %d years, %d months, %d days\n", YMDpassed->year, YMDpassed->month, YMDpassed->day);
+    daysToYMD(daysPassedInt);
+    
     
    // struct date *difference = daysToYMD(&date1, &date2);
   //  printf(" Between these dates passed: %d years, %d months, %d days./n", difference->year, difference->month, difference->day);
@@ -108,18 +111,22 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
 }
 
 int isLeapYear(int x) {
-	   int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0);
+	   int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
     printf("isLeapYear    : %d\n", answer);
     return answer;
 }
-    /*ternary conditional operator again
+    /*
     According to the Gregorian calendar, most years divisible by 4 are leap years,
     but not all. Years that are divisible by 100 are not leap years, except for years
     that are also divisible by 400. */
     
 
-struct date* daysToYMD(int daysPassed, struct date *difference) {
-   // struct date *difference;
+void daysToYMD(int daysPassed) {
+    struct date *difference = (struct date *)malloc(sizeof(struct date *));
+    if (difference == NULL) {
+        printf ("Memory allocation error\n");
+         
+    }
     
     difference->year = daysPassed / 365;
     daysPassed %= 365;
@@ -131,6 +138,17 @@ struct date* daysToYMD(int daysPassed, struct date *difference) {
     
     difference->day = daysPassed;
     printf("Days: %d\n", difference->day);
-    
-    return difference;
+    free(difference);
+}
+
+float averageDays () {
+	   int x = 0;
+	   float y = 0.0;
+	   for (int i=0; i<4; i++) {
+	   	   x += 365;
+    }
+    x++; //29 Feb
+    y = ((float)x/48.0); //48 = 12 months * 4 years
+    printf("Average days in month, including leap year: %f\n", y);
+    return y;
 }

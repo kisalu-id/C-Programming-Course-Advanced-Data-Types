@@ -29,12 +29,40 @@ int main() {
     printf("Enter the second date (Format: DD MM YYYY): ");
     readDate(&date2);
     
+    
+    
+    //error handling
+    
+    //if user input 33 14 2024
+    if (!((date1.day == 29 && date1.month == 2 && isLeapYear(date1.year))
+    || (date2.day == 29 && date2.month == 2 && isLeapYear(date2.year)))) {
+        if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
+	           printf("This date doesn't exist\n");
+	           return 0;
+	       }
+	   } 
+	   
+	   
+
+	   
+   
+   //if user input negative
+   
+   //regex numbers 
+
+
+    
+
     printf("the first date: ");
     printDate(date1);
     printf("the second date: ");
     printDate(date2);
     
     int daysPassedInt = daysPassedFunct(&date1, &date2);
+    if (daysPassedInt < 0) {
+    	   printf("Error: negative number\n");
+    	   return 0;
+    }
     printf("Between these dates passed: %d days\n", daysPassedInt);
     
     daysToYMD(daysPassedInt);
@@ -99,9 +127,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
     } 
     
-    
-	   
-	   for (int yeari = date1->year; yeari <= (date2->year - 1); yeari++) { //for each year
+    for (int yeari = date1->year; yeari <= (date2->year - 1); yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
         daysPassed += (isLeapYear(yeari) && date1->month<=2)? 366 : 365;     
     } //or here loop through the daysInMonth?? seems more reliable
@@ -122,7 +148,7 @@ int isLeapYear(int x) {
     
 
 void daysToYMD(int daysPassed) {
-    struct date *difference = (struct date *)malloc(sizeof(struct date *));
+    struct date *difference = (struct date *)malloc(sizeof(struct date));
     if (difference == NULL) {
         printf ("Memory allocation error\n");
          
@@ -149,6 +175,16 @@ float averageDays () {
     }
     x++; //29 Feb
     y = ((float)x/48.0); //48 = 12 months * 4 years
-    printf("Average days in month, including leap year: %f\n", y);
+    printf("Average days in month, including leap year: %f\n\n", y);
     return y;
 }
+    
+    
+    /* add feature of swapping?
+    struct date *temp = date1;
+    date1 = date2;
+    date2 = temp;  
+    */
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

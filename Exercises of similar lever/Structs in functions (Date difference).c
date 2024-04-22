@@ -30,25 +30,20 @@ int main() {
     readDate(&date2);
     
     
-    
     //error handling
     
     //if user input 33 14 2024
     if (!((date1.day == 29 && date1.month == 2 && isLeapYear(date1.year))
     || (date2.day == 29 && date2.month == 2 && isLeapYear(date2.year)))) {
         if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
-	           printf("This date doesn't exist\n");
-	           return 0;
-	       }
-	   } 
+            printf("This date doesn't exist\n");
+            return 0;
+	}
+    }
 	   
-	   
-
 	   
    
-   //if user input negative
-   
-   //regex numbers 
+   //regex positive numbers 
 
 
     
@@ -60,17 +55,13 @@ int main() {
     
     int daysPassedInt = daysPassedFunct(&date1, &date2);
     if (daysPassedInt < 0) {
-    	   printf("Error: negative number\n");
-    	   return 0;
+        printf("Error: negative number\n");
+        return 0;
     }
-    printf("Between these dates passed: %d days\n", daysPassedInt);
+    printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
     
     daysToYMD(daysPassedInt);
-    
-    
-   // struct date *difference = daysToYMD(&date1, &date2);
-  //  printf(" Between these dates passed: %d years, %d months, %d days./n", difference->year, difference->month, difference->day);
-    
+
     return 0;
 }
 
@@ -85,10 +76,10 @@ void printDate(struct date x) {
 
 //do a scheme that covers for different cases
 int daysPassedFunct(struct date *date1, struct date *date2) {
-	   int daysPassed = 0;
+    int daysPassed = 0;
 	   
-	   //case 1: same date
-	   if (date1->day == date2->day && date1->month == date2->month && date1->year == date2->year) {
+    //case 1: same date
+    if (date1->day == date2->day && date1->month == date2->month && date1->year == date2->year) {
         return daysPassed;
     } 
     
@@ -102,7 +93,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     if (date1->month < date2->month && date1->year <= date2->year) {
         daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
         for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
-        	    daysPassed += daysInMonth[monthi - 1];
+            daysPassed += daysInMonth[monthi - 1];
        	}
         printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
     }
@@ -115,13 +106,13 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
        // int j = 12 - date1->month + date2->month;
         
         for (int i = date1->month; i < 12; i++) { //if month difference is >1
-        	    daysPassed += daysInMonth[i];        //count until dec
-             printf("daysPassed, loop2 count1: %d\n", daysPassed);
+            daysPassed += daysInMonth[i];        //count until dec
+            printf("daysPassed, loop2 count1: %d\n", daysPassed);
         }
         for (int i = 1; i < date2->month; i++) { //count up to date
-        	    daysPassed += daysInMonth[i - 1];
-        	    printf("daysPassed, loop2 count2: %d\n", daysPassed);
-        	}
+            daysPassed += daysInMonth[i - 1];
+            printf("daysPassed, loop2 count2: %d\n", daysPassed);
+        }
         printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
         daysPassed -= 365; //temporary crutch
         printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
@@ -137,7 +128,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
 }
 
 int isLeapYear(int x) {
-	   int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
+    int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
     printf("isLeapYear    : %d\n", answer);
     return answer;
 }
@@ -163,28 +154,18 @@ void daysToYMD(int daysPassed) {
     printf("Months: %d\n", difference->month);
     
     difference->day = daysPassed;
-    printf("Days: %d\n", difference->day);
+    printf("Days: %d\n\n", difference->day);
     free(difference);
 }
 
 float averageDays () {
-	   int x = 0;
-	   float y = 0.0;
-	   for (int i=0; i<4; i++) {
-	   	   x += 365;
+    int x = 0;
+    float y = 0.0;
+    for (int i=0; i<4; i++) {
+        x += 365;
     }
     x++; //29 Feb
     y = ((float)x/48.0); //48 = 12 months * 4 years
     printf("Average days in month, including leap year: %f\n\n", y);
     return y;
 }
-    
-    
-    /* add feature of swapping?
-    struct date *temp = date1;
-    date1 = date2;
-    date2 = temp;  
-    */
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

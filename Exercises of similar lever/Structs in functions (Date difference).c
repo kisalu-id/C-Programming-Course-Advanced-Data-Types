@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <regex.h>
 
 struct date {
     int day;
@@ -38,7 +39,7 @@ int main() {
         if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
             printf("This date doesn't exist\n");
             return 0;
-	}
+	       }
     }
 	   
 	   
@@ -52,7 +53,11 @@ int main() {
     printDate(date1);
     printf("the second date: ");
     printDate(date2);
-    
+
+
+    valiDate(date1); //do good design
+    valiDate(date2);
+	
     int daysPassedInt = daysPassedFunct(&date1, &date2);
     if (daysPassedInt < 0) {
         printf("Error: negative number\n");
@@ -98,7 +103,6 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
     }
     
-    
     //diff month, 1>2
     if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
         daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
@@ -107,11 +111,11 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         
         for (int i = date1->month; i < 12; i++) { //if month difference is >1
             daysPassed += daysInMonth[i];        //count until dec
-            printf("daysPassed, loop2 count1: %d\n", daysPassed);
+            //printf("daysPassed, loop2 count1: %d\n", daysPassed);
         }
         for (int i = 1; i < date2->month; i++) { //count up to date
             daysPassed += daysInMonth[i - 1];
-            printf("daysPassed, loop2 count2: %d\n", daysPassed);
+            //printf("daysPassed, loop2 count2: %d\n", daysPassed);
         }
         printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
         daysPassed -= 365; //temporary crutch
@@ -121,15 +125,14 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     for (int yeari = date1->year; yeari <= (date2->year - 1); yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
         daysPassed += (isLeapYear(yeari) && date1->month<=2)? 366 : 365;     
-    } //or here loop through the daysInMonth?? seems more reliable
-    
+    }
     printf("daysPassed, counted years: %d\n", daysPassed);
     return daysPassed;
 }
 
 int isLeapYear(int x) {
     int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
-    printf("isLeapYear    : %d\n", answer);
+    printf("isLeapYear: %d\n", answer);
     return answer;
 }
     /*
@@ -142,7 +145,7 @@ void daysToYMD(int daysPassed) {
     struct date *difference = (struct date *)malloc(sizeof(struct date));
     if (difference == NULL) {
         printf ("Memory allocation error\n");
-         
+  
     }
     
     difference->year = daysPassed / 365;
@@ -169,3 +172,50 @@ float averageDays () {
     printf("Average days in month, including leap year: %f\n\n", y);
     return y;
 }
+    
+    
+    /* add feature of swapping?
+    struct date *temp = date1;
+    date1 = date2;
+    date2 = temp;  
+    */
+
+
+//!!! add fgets
+
+
+
+
+
+
+int valiDate(struct date *x) {
+    regex_t regex;
+    int regexCompilation;
+    int regexExecution;
+
+     //compile the regex pattern
+    regexCompilation = regcomp(&regex, "REGEX PATTERN HERE!!!!", REG_EXTENDED);
+
+    if (regexCompilation) {
+        fprintf(stderr, "Regex compilation failed\n");
+        return 0; 
+        }
+
+
+    //commpare the date input with the regex pattern
+    regexExecution = regexec(&regex, x, 0, NULL, 0);
+    regfree(&regex);
+
+
+
+
+
+	
+
+    return 0;
+}
+
+
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

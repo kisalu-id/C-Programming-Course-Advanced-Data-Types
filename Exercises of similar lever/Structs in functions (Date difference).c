@@ -19,6 +19,7 @@ int daysPassedFunct(struct date *, struct date *);
 void daysToYMD(int);
 int isLeapYear(int);
 float averageDays();
+int valiDate(struct date *);
 
 int main() {
     struct date date1, date2;
@@ -188,34 +189,39 @@ float averageDays () {
 
 
 
+
 int valiDate(struct date *x) {
     regex_t regex;
     int regexCompilation;
     int regexExecution;
 
-     //compile the regex pattern
     regexCompilation = regcomp(&regex, "REGEX PATTERN HERE!!!!", REG_EXTENDED);
 
     if (regexCompilation) {
         fprintf(stderr, "Regex compilation failed\n");
         return 0; 
         }
+    
 
 
     //commpare the date input with the regex pattern
     regexExecution = regexec(&regex, x, 0, NULL, 0);
+
+    if (!regexExecution) { 
+        return 1; //not sure about this function, double check
+    } else  if (regexExecution == REG_NOMATCH) {
+    
+//error instant msg to console
+
+
+} else {
+        printf("Regex error... \n");
+        return 0;
+    }
+
     regfree(&regex);
-
-
-
-
+}
 
 	
 
-    return 0;
-}
-
-
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 
+   

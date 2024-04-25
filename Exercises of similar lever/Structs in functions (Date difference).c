@@ -16,7 +16,7 @@ int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 void printDate(struct date);
 void readDate(struct date *);
 int daysPassedFunct(struct date *, struct date *);
-void daysToYMD(int);
+void daysToYMD(int, float);
 int isLeapYear(int);
 float averageDays();
 int valiDate(struct date *);
@@ -24,49 +24,46 @@ int valiDate(struct date *);
 int main() {
     struct date date1, date2;
     
-    averageDays();
+    float avgDays = averageDays();
     
     printf("Enter the first date (Format: DD MM YYYY): ");
     readDate(&date1);
     printf("Enter the second date (Format: DD MM YYYY): ");
     readDate(&date2);
     
-    
-    //error handling
-    
+    //error handling  
+   
+   //regex positive numbers 
+   if (valiDate(&date1) && valiDate(&date2)) {
+    //from pc do tab
+
     //if user input 33 14 2024
     if (!((date1.day == 29 && date1.month == 2 && isLeapYear(date1.year))
     || (date2.day == 29 && date2.month == 2 && isLeapYear(date2.year)))) {
         if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
             printf("This date doesn't exist\n");
             return 0;
-	       }
+        }
     }
-	   
-	   
-   
-   //regex positive numbers 
-
-
-    
-
-    printf("the first date: ");
-    printDate(date1);
-    printf("the second date: ");
-    printDate(date2);
-
-
-    valiDate(date1); //do good design
-    valiDate(date2);
-	
+  
     int daysPassedInt = daysPassedFunct(&date1, &date2);
     if (daysPassedInt < 0) {
         printf("Error: negative number\n");
         return 0;
     }
+    
+    printf("the first date: ");
+    printDate(date1);
+    printf("the second date: ");
+    printDate(date2);
+    
     printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
     
-    daysToYMD(daysPassedInt);
+    
+    daysToYMD(daysPassedInt, avgDays);
+    
+    //tab until here, to-do for valid regex
+    }
 
     return 0;
 }
@@ -89,8 +86,8 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         return daysPassed;
     } 
     
-    //diff day, same month, //same year
-    if (date1->day != date2->day && date1->month ==date2->month && date1->year == date2->year) {  //maybe say if m=m y=y? 
+    //diff day, same month, same year
+    if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {  //maybe say if m=m y=y? 
         daysPassed += date2->day - date1->day;  
         printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
     }
@@ -114,10 +111,12 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
             daysPassed += daysInMonth[i];        //count until dec
             //printf("daysPassed, loop2 count1: %d\n", daysPassed);
         }
+        
         for (int i = 1; i < date2->month; i++) { //count up to date
             daysPassed += daysInMonth[i - 1];
             //printf("daysPassed, loop2 count2: %d\n", daysPassed);
         }
+        
         printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
         daysPassed -= 365; //temporary crutch
         printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
@@ -136,24 +135,22 @@ int isLeapYear(int x) {
     printf("isLeapYear: %d\n", answer);
     return answer;
 }
-    /*
-    According to the Gregorian calendar, most years divisible by 4 are leap years,
+    /* According to the Gregorian calendar, most years divisible by 4 are leap years,
     but not all. Years that are divisible by 100 are not leap years, except for years
-    that are also divisible by 400. */
-    
+    that are also divisible by 400. */  
 
-void daysToYMD(int daysPassed) {
+void daysToYMD(int daysPassed, float averageDays) {
     struct date *difference = (struct date *)malloc(sizeof(struct date));
     if (difference == NULL) {
         printf ("Memory allocation error\n");
-  
     }
     
     difference->year = daysPassed / 365;
     daysPassed %= 365;
     printf("Years: %d\n", difference->year);
     
-    difference->month = daysPassed / 30;
+    difference->month = (int)((float)daysPassed / averageDays);
+    printf("daystoYMD diff months: %d\n");
     daysPassed %= 30;
     printf("Months: %d\n", difference->month);
     
@@ -189,39 +186,39 @@ float averageDays () {
 
 
 
-
 int valiDate(struct date *x) {
     regex_t regex;
     int regexCompilation;
     int regexExecution;
 
+     //compile the regex pattern
     regexCompilation = regcomp(&regex, "REGEX PATTERN HERE!!!!", REG_EXTENDED);
 
     if (regexCompilation) {
         fprintf(stderr, "Regex compilation failed\n");
         return 0; 
         }
-    
 
 
     //commpare the date input with the regex pattern
     regexExecution = regexec(&regex, x, 0, NULL, 0);
+    regfree(&regex);
 
-    if (!regexExecution) { 
-        return 1; //not sure about this function, double check
-    } else  if (regexExecution == REG_NOMATCH) {
+    if (regexExecution == 0){
+        return 1;
+    }
+    else if (regexExecution == REG_NOMATCH) {
+        fprintf(stderr, "Invalid date format.\n");
+        
+    } else {
     
-//error instant msg to console
-
-
-} else {
-        printf("Regex error... \n");
-        return 0;
+        fprintf(stderr, "Error...\n");
     }
 
-    regfree(&regex);
+    return 0;
 }
 
-	
 
-   
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

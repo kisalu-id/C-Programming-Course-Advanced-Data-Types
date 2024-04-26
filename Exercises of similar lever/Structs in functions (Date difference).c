@@ -32,37 +32,31 @@ int main() {
     readDate(&date2);
     
     //error handling  
-   
-   //regex positive numbers 
-   if (valiDate(&date1) && valiDate(&date2)) {
-    //from pc do tab
-
-    //if user input 33 14 2024
-    if (!((date1.day == 29 && date1.month == 2 && isLeapYear(date1.year))
-    || (date2.day == 29 && date2.month == 2 && isLeapYear(date2.year)))) {
-        if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
-            printf("This date doesn't exist\n");
+    //regex positive numbers 
+    if (valiDate(&date1) && valiDate(&date2)) {
+        //if user input 33 14 2024
+        if (!((date1.day == 29 && date1.month == 2 && isLeapYear(date1.year))
+        || (date2.day == 29 && date2.month == 2 && isLeapYear(date2.year)))) {
+            if ((date1.day > daysInMonth[date1.month -1]) || (date2.day > daysInMonth[date2.month -1])) {
+                printf("This date doesn't exist\n");
+                return 0;
+            }
+        }
+      
+        int daysPassedInt = daysPassedFunct(&date1, &date2);
+        if (daysPassedInt < 0) {
+            printf("Error: negative number\n");
             return 0;
         }
-    }
-  
-    int daysPassedInt = daysPassedFunct(&date1, &date2);
-    if (daysPassedInt < 0) {
-        printf("Error: negative number\n");
-        return 0;
-    }
-    
-    printf("the first date: ");
-    printDate(date1);
-    printf("the second date: ");
-    printDate(date2);
-    
-    printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
-    
-    
-    daysToYMD(daysPassedInt, avgDays);
-    
-    //tab until here, to-do for valid regex
+        
+        printf("the first date: ");
+        printDate(date1);
+        printf("the second date: ");
+        printDate(date2);
+        
+        printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
+        
+        daysToYMD(daysPassedInt, avgDays);
     }
 
     return 0;
@@ -80,7 +74,7 @@ void printDate(struct date x) {
 //do a scheme that covers for different cases
 int daysPassedFunct(struct date *date1, struct date *date2) {
     int daysPassed = 0;
-	   
+     
     //case 1: same date
     if (date1->day == date2->day && date1->month == date2->month && date1->year == date2->year) {
         return daysPassed;
@@ -97,7 +91,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
         for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
             daysPassed += daysInMonth[monthi - 1];
-       	}
+         }
         printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
     }
     
@@ -117,7 +111,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
             //printf("daysPassed, loop2 count2: %d\n", daysPassed);
         }
         
-        printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed); 	
+        printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);   
         daysPassed -= 365; //temporary crutch
         printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
     } 
@@ -171,7 +165,6 @@ float averageDays () {
     return y;
 }
     
-    
     /* add feature of swapping?
     struct date *temp = date1;
     date1 = date2;
@@ -181,23 +174,18 @@ float averageDays () {
 
 //!!! add fgets
 
-
-
-
-
-
 int valiDate(struct date *x) {
     regex_t regex;
     int regexCompilation;
     int regexExecution;
 
-     //compile the regex pattern
-    regexCompilation = regcomp(&regex, "REGEX PATTERN HERE!!!!", REG_EXTENDED);
+    //compile the regex pattern
+    regexCompilation = regcomp(&regex, "^(0[1-9]|[1-2][0-9]|3[0-1]) (0[1-9]|1[0-2]) [0-9]{4}$", REG_EXTENDED); //check if regex is correct
 
     if (regexCompilation) {
         fprintf(stderr, "Regex compilation failed\n");
         return 0; 
-        }
+    }
 
 
     //commpare the date input with the regex pattern
@@ -209,16 +197,9 @@ int valiDate(struct date *x) {
     }
     else if (regexExecution == REG_NOMATCH) {
         fprintf(stderr, "Invalid date format.\n");
-        
     } else {
-    
         fprintf(stderr, "Error...\n");
     }
 
     return 0;
 }
-
-
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding 

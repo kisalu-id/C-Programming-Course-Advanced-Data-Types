@@ -15,6 +15,8 @@ struct date {
 
 int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
 
+int leapYears = 0;
+
 void printDate(struct date);
 void readDate(struct date *);
 int daysPassedFunct(struct date *, struct date *);
@@ -68,13 +70,16 @@ int main() {
 }
 
 
+
 void readDate(struct date *x) {
     scanf("%d %d %d", &x->day, &x->month, &x->year);
 }
 
+
 void printDate(struct date x) {
     printf("%02d/%02d/%04d\n", x.day, x.month, x.year);
 }
+
 
 //do a scheme that covers for different cases
 int daysPassedFunct(struct date *date1, struct date *date2) {
@@ -86,10 +91,16 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     } 
     
     //diff day, same month, same year
-    if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {  //maybe say if m=m y=y? 
+    if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {
         daysPassed += date2->day - date1->day;  
         printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
     }
+    
+    
+     printf("checking years 1: %d\n", date1->year);
+     printf("checking years 2: %d\n", date2->year);
+     
+     
     
     //diff month, 1<2
     if (date1->month < date2->month && date1->year <= date2->year) {
@@ -97,8 +108,35 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
             daysPassed += daysInMonth[monthi - 1];
          }
+         
+         
         printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
+        printf("checking years 1: %d\n", date1->year);
+        printf("checking years 2: %d\n", date2->year);
+        
+        
+        
+        /*
+        if (date1->year = date2->year) {
+            daysPassed -= 365;
+        } else {
+            daysPassed += 365;
+        }
+        */
+        printf("daysPassed, counted months, entered loop 1, dealt with years!!!: %d\n", daysPassed);
     }
+    
+    
+    printf("checking years 1: %d\n", date1->year);
+    printf("checking years 2: %d\n", date2->year);
+    
+    
+    if (date1->year < date2->year) {
+        daysPassed += 365;
+    }
+    
+    
+    
     
     //diff month, 1>2
     if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
@@ -115,17 +153,49 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         }
         
         printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);   
-        daysPassed -= 365; //temporary crutch
+        
+        
+        //daysPassed -= 365; //temporary crutch
         printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
     } 
     
-    for (int yeari = date1->year; yeari <= (date2->year - 1); yeari++) { //for each year
+    for (int yeari = (date1->year + 1); yeari <= (date2->year - 1); yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
-        daysPassed += (isLeapYear(yeari) && date1->month<=2)? 366 : 365;     
+        if (isLeapYear(yeari)) {
+            daysPassed ++;
+            leapYears++;
+        }
+        daysPassed += 365;
+        printf("!!!!!!Leapyears: %d\n", leapYears);
     }
+    printf("!!!!!!test: %d\n", daysPassed);
+    //daysPassed += 365;
+    printf("!!!!!!test: %d\n", daysPassed);
+    
+    
+     printf("checking years 1: %d\n", date1->year);
+    printf("checking years 2: %d\n", date2->year);
+    
+    
+    //account for 29th Feb
+    if (isLeapYear(date1->year)) {
+        if ((date1->day <= 29 && date1->month == 2) || (date1->month ==1)) { //if start date is before or equal to 29th Feb
+            daysPassed++;
+            leapYears++;
+        }
+    }
+    if (isLeapYear(date2->year) && (date1->year != date2->year)) {
+        if ((date2->day == 29 && date2->month == 2) || (date2->month > 2)) { //if end date is equal or after 29th Feb
+            daysPassed++;
+            leapYears++;
+        }
+    }
+
+    
     printf("daysPassed, counted years: %d\n", daysPassed);
     return daysPassed;
 }
+
 
 int isLeapYear(int x) {
     int answer = (x % 4 == 0 && x % 100 != 0) || (x % 400 == 0); //ternary conditional operator again
@@ -135,21 +205,37 @@ int isLeapYear(int x) {
     /* According to the Gregorian calendar, most years divisible by 4 are leap years,
     but not all. Years that are divisible by 100 are not leap years, except for years
     that are also divisible by 400. */  
+    
 
 void daysToYMD(int daysPassed, float averageDays) {
+    
+    //pass date1 date 2, loop isLeapYear
+    
+    
+    
     struct date *difference = (struct date *)malloc(sizeof(struct date));
     if (difference == NULL) {
         printf ("Memory allocation error\n");
     }
     
-    difference->year = daysPassed / 365;
+    difference->year = (daysPassed - leapYears) / 365;
     daysPassed %= 365;
     printf("Years: %d\n", difference->year);
+
     
     //difference->month = round((float)daysPassed / averageDays);
     //printf("daystoYMD diff months rounded typecasting : %d\n", difference->month);
-    difference->month = daysPassed / 30;
     
+    /*attempt to tame months
+    fdaysPassed = (float)daysPassed
+    difference->month = fdaysPassed / averageDays;
+    
+    (float)daysPassed %= averageDays;
+    (int)daysPassed;
+    */
+    
+    //prev code
+    difference->month = daysPassed / 30;
     daysPassed %= 30;
     printf("Months: %d\n", difference->month);
     
@@ -167,6 +253,7 @@ void daysToYMD(int daysPassed, float averageDays) {
     free(difference);
 }
 
+
 float averageDays () {
     int x = 0;
     float y = 0.0;
@@ -178,6 +265,7 @@ float averageDays () {
     printf("Average days in month, including leap year: %f\n\n", y);
     return y;
 }
+
 
 int valiDate(struct date *x) {
     char xStr[11]; //lets say max 10 characters
@@ -225,3 +313,5 @@ int valiDate(struct date *x) {
 //!!! add fgets
 
 //add count only workdays?
+
+//daystoymd divide dayspassed / 365*4+1

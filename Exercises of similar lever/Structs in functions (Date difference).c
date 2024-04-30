@@ -23,7 +23,7 @@ void daysToYMD(int, float);
 int isLeapYear(int);
 float averageDays();
 int valiDate(struct date *);
-int dayOfWeek(int);
+int dayOfWeek(struct date *, struct date *);
 void dayOfWeek2(int);
 
 
@@ -64,6 +64,9 @@ int main() {
         printDate(date2);
 
         printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
+        
+        
+        dayOfWeek(&date1, &date2);
 
         daysToYMD(daysPassedInt, avgDays);
     }
@@ -301,10 +304,13 @@ int valiDate(struct date *x) {
     return 0;
 }
 
-int dayOfWeek (int daysPassed) {
+int dayOfWeek (struct date *date1, struct date *date2) {
     int a, b;
     //1 Jan 2024 is Monday
     //malloc dateX 1 1 2024
+    struct date *dateX = (struct date *)malloc(sizeof(struct date));
+    
+    struct date dateX = {1, 0, 2024}; //1 Jan 2024 is Monday
 
     a = daysPassedFunct(date1, dateX);
     b = daysPassedFunct(dateX, date2);
@@ -314,7 +320,8 @@ int dayOfWeek (int daysPassed) {
 
     printDate(date2);
     bdayOfWeek2(b);
-
+    
+    free(dateX);
 
     return x;
 }
@@ -323,10 +330,32 @@ void dayOfWeek2 (int x) {
     x %= 7;
 
     //switch if 1 - mon, etc.
-
-
-
-    printf(" is Monday");
+    switch (x) {
+        case 0:
+            printf(" is Sunday.\n");
+            break;
+        case 1:
+            printf(" is Monday.\n");
+            break;
+        case 2:
+            printf(" is Tuesday.\n");
+            break;
+        case 3:
+            printf(" is Wednesday.\n");
+            break;
+        case 4:
+            printf(" is Thursday.\n");
+            break;
+         case 5:
+            printf(" is Friday.\n");
+            break;
+         case 0:
+            printf(" is Saturday.\n");
+            break;
+        default:
+            fprintf(stderr, "Error in detecting dayOfWeek2\n");
+            return -1;
+    }
 }
 
 

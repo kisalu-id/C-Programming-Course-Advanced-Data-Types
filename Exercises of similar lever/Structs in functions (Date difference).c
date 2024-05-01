@@ -23,7 +23,7 @@ void daysToYMD(int, float);
 int isLeapYear(int);
 float averageDays();
 int valiDate(struct date *);
-int dayOfWeek(struct date *, struct date *);
+void dayOfWeek(struct date *, struct date *);
 void dayOfWeek2(int);
 
 
@@ -33,10 +33,14 @@ int main() {
 
     printf("Enter the first date (Format: DD MM YYYY): ");
     readDate(&date1);
-    if (valiDate(&date1)) {
-        printf("Enter the second date (Format: DD MM YYYY): ");
-        readDate(&date2);
-    } else {
+    if (!valiDate(&date1)) {
+        return 0;
+    }
+    
+    printf("Enter the second date (Format: DD MM YYYY): ");
+    readDate(&date2);
+    
+    if (!valiDate(&date2)) {
         return 0;
     }
 
@@ -304,26 +308,25 @@ int valiDate(struct date *x) {
     return 0;
 }
 
-int dayOfWeek (struct date *date1, struct date *date2) {
+void dayOfWeek (struct date *date1, struct date *date2) {
     int a, b;
-    //1 Jan 2024 is Monday
-    //malloc dateX 1 1 2024
     struct date *dateX = (struct date *)malloc(sizeof(struct date));
     
-    struct date dateX = {1, 0, 2024}; //1 Jan 2024 is Monday
+    //1 Jan 2024 is Monday
+    dateX->day = 1;
+    dateX->month = 1;
+    dateX->year = 2024;
 
     a = daysPassedFunct(date1, dateX);
     b = daysPassedFunct(dateX, date2);
 
-    printDate(date1);
+    printDate(*date1);
     dayOfWeek2(a);
 
-    printDate(date2);
-    bdayOfWeek2(b);
+    printDate(*date2);
+    dayOfWeek2(b);
     
     free(dateX);
-
-    return x;
 }
 
 void dayOfWeek2 (int x) {
@@ -349,12 +352,12 @@ void dayOfWeek2 (int x) {
          case 5:
             printf(" is Friday.\n");
             break;
-         case 0:
+         case 6:
             printf(" is Saturday.\n");
             break;
         default:
             fprintf(stderr, "Error in detecting dayOfWeek2\n");
-            return -1;
+            //return -1; warning here, for now comment oput
     }
 }
 
@@ -374,3 +377,11 @@ void dayOfWeek2 (int x) {
 //add count only workdays?
 
 //daystoymd divide dayspassed / 365*4+1
+
+/*
+Solve sub-problem first:
+in daysPassedFunct count how much days passed between date1 and dateX (1 Jan 2024, Mon)
+and between 1 Jan 2024 and date2
+return sum for the main function, handle negative nums differently?
+use same results to count which date of week both dates are
+*/

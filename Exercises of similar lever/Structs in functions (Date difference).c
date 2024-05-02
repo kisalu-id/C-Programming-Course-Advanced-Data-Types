@@ -25,7 +25,7 @@ float averageDays();
 int valiDate(struct date *);
 void dayOfWeek(struct date *, struct date *);
 void dayOfWeek2(int);
-
+void alternativeTimeUnits(int);
 
 int main() {
     struct date date1, date2;
@@ -73,6 +73,8 @@ int main() {
         dayOfWeek(&date1, &date2);
 
         daysToYMD(daysPassedInt, avgDays);
+        
+        alternativeTimeUnits(daysPassedInt);
     }
 
     return 0;
@@ -361,9 +363,14 @@ void dayOfWeek2 (int x) {
     }
 }
 
-
-    //ADD alternative time units - sec, min, h
-
+void alternativeTimeUnits(int daysPassed) {
+    long long int daysPassedLong = (long long int)daysPassed * 24;
+    printf("\n\nIt is %lld hours\n", daysPassedLong);
+    daysPassedLong *= 60;
+    printf("It is %lld minutes\n", daysPassedLong);
+    daysPassedLong *= 60;
+    printf("It is %lld seconds\n", daysPassedLong);
+}
 
     /* add feature of swapping?
     struct date *temp = date1;
@@ -384,4 +391,7 @@ in daysPassedFunct count how much days passed between date1 and dateX (1 Jan 202
 and between 1 Jan 2024 and date2
 return sum for the main function, handle negative nums differently?
 use same results to count which date of week both dates are
+edit pointers to daysPassed1 and daysPassed2
+do sum
+= daysPassed
 */

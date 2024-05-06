@@ -23,13 +23,20 @@ void daysToYMD(int, float);
 int isLeapYear(int);
 float averageDays();
 int valiDate(struct date *);
-void dayOfWeek(struct date *, struct date *);
+void dayOfWeek (int, int, struct date *);
 void dayOfWeek2(int);
 void alternativeTimeUnits(int);
 
 int main() {
     struct date date1, date2;
     float avgDays = averageDays();
+    int a, b;
+    struct date *dateX = (struct date *)malloc(sizeof(struct date));
+    //1 Jan 2024 is Monday
+    dateX->day = 1;
+    dateX->month = 1;
+    dateX->year = 2024; //I'll be counting: a(date differece between date1 and dateX) + b(date differece between dateX and date2)
+    
 
     printf("Enter the first date (Format: DD MM YYYY): ");
     readDate(&date1);
@@ -55,8 +62,18 @@ int main() {
                 return 0;
             }
         }
+        
+        
+        
+        //here do swap funct!!!
+        
+        
+        a = daysPassedFunct(&date1, dateX);
+        b = daysPassedFunct(dateX, &date2);
+        int daysPassedInt = a + b;
 
-        int daysPassedInt = daysPassedFunct(&date1, &date2);
+
+
         if (daysPassedInt < 0) {
             fprintf(stderr, "Error: negative number\n");
             return 0;
@@ -70,7 +87,7 @@ int main() {
         printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
         
         
-        dayOfWeek(&date1, &date2);
+        dayOfWeek(a, b, dateX);
 
         daysToYMD(daysPassedInt, avgDays);
         
@@ -310,25 +327,23 @@ int valiDate(struct date *x) {
     return 0;
 }
 
-void dayOfWeek (struct date *date1, struct date *date2) {
-    int a, b;
-    struct date *dateX = (struct date *)malloc(sizeof(struct date));
+void dayOfWeek (int a, int b, struct date *dateX) {
     
-    //1 Jan 2024 is Monday
+    
+    /*1 Jan 2024 is Monday
     dateX->day = 1;
     dateX->month = 1;
     dateX->year = 2024;
 
     a = daysPassedFunct(date1, dateX);
     b = daysPassedFunct(dateX, date2);
+*/
 
-    printDate(*date1);
     dayOfWeek2(a);
 
-    printDate(*date2);
+
     dayOfWeek2(b);
     
-    free(dateX);
 }
 
 void dayOfWeek2 (int x) {
@@ -370,6 +385,21 @@ void alternativeTimeUnits(int daysPassed) {
     printf("It is %lld minutes\n", daysPassedLong);
     daysPassedLong *= 60;
     printf("It is %lld seconds\n", daysPassedLong);
+}
+
+
+
+void swapDates (struct date *date1, struct date *date2) {
+struct date temp = *date1;  // Create a temporary struct date to hold the values of date1
+*date1 = *date2;            // Assign the values of date2 to date1
+*date2 = temp; 
+    
+
+    printf("\nSWAPDATES The first date: ");
+    printDate(*date1);
+    printf("\nSWAPDATESThe second date: ");
+    printDate(*date2);
+
 }
 
     /* add feature of swapping?

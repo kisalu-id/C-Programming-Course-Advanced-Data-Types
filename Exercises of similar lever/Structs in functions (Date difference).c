@@ -26,7 +26,8 @@ float averageDays();
 int valiDate(struct date *);
 void dayOfWeek(int);
 void alternativeTimeUnits(int);
-void swapDates (struct date *, struct date *);
+int plusPlus(int);
+//void swapDates(struct date *, struct date *);  do i need that?
 
 int main() {
     struct date date1, date2;
@@ -77,7 +78,7 @@ int main() {
             printf("77 swapped a.....................\n\n");
             printf("Negative = %d\n");
         }
-        if (b<0) {
+        if (b<0) { 
             b = daysPassedFunct(&date2, dateX);
             negative += 2;
             printf("82 swapped b.....................\n\n");
@@ -85,14 +86,9 @@ int main() {
         }
         
         
-        int daysPassedInt = a + b;
+        int daysPassedInt = abs(a) + abs(b);
 
-
-
-        if (daysPassedInt < 0) {
-            fprintf(stderr, "Error: negative number\n");
-            return 0;
-        }
+/*
 
         printf("\nThe first date: ");
         printDate(date1);
@@ -106,8 +102,9 @@ int main() {
         
         printDate(date2);
         dayOfWeek(b);
-        daysToYMD(daysPassedInt, avgDays);
         
+        daysToYMD(daysPassedInt, avgDays);
+
         alternativeTimeUnits(daysPassedInt);
     }
 
@@ -122,7 +119,7 @@ void readDate(struct date *x) {
 
 
 void printDate(struct date x) {
-    printf("%02d/%02d/%04d\n", x.day, x.month, x.year);
+    printf("%02d/%02d/%04d", x.day, x.month, x.year);
 }
 
 //do a scheme that covers for different cases
@@ -209,7 +206,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     for (int yeari = (date1->year + 1); yeari <= (date2->year - 1); yeari++) { //for each year
         //check for each year, if that's a leap year, if yes, add a leap day
         if (isLeapYear(yeari)) {
-            daysPassed++;
+            daysPassed++; //create a function that will for a negative num do -- and for pos ++
             leapYears++;
         }
         daysPassed += 365;
@@ -407,20 +404,33 @@ void alternativeTimeUnits(int daysPassed) {
     printf("It is %lld seconds\n", daysPassedLong);
 }
 
+int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should account for both. use another int plusOrMinus to indicate that?
+    if (x > 0 && plusOrMinus > 0) { //need to do positive days++
+        
+    }
+    else if (x > 0 && plusOrMinus < 0)) { //need to do positive days--
+        
+    } 
+    else if (x < 0 && plusOrMinus > 0) { //need to do negative days++
+        
+    }
+    else if (x < 0 && plusOrMinus < 0)) { //need to do negative days--
+        
+    }
+    //...or i can just use logic and math instead of this ^
+}
 
-
-void swapDates (struct date *date1, struct date *date2) {
+/* void swapDates (struct date *date1, struct date *date2) {
 struct date temp = *date1;  // Create a temporary struct date to hold the values of date1
 *date1 = *date2;            // Assign the values of date2 to date1
 *date2 = temp; 
-    
 
     printf("\nSWAPDATES The first date: ");
     printDate(*date1);
     printf("\nSWAPDATESThe second date: ");
     printDate(*date2);
 
-}
+} 
 
     /* add feature of swapping?
     struct date *temp = date1;

@@ -1,4 +1,3 @@
-
 //A program that counts how much days and DMY passed between two dates
 //inspired by my other program, that counts what day is next
 
@@ -88,24 +87,17 @@ int main() {
         //here I need negative numbers, but in daysPassedFunct I need positive ideally, order?
         int daysPassedInt = a + b;
 
-/*
-
-        printf("\nThe first date: ");
-        printDate(date1);
-        printf("The second date: ");
-        printDate(date2); 
-*/
         printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
+        
+        alternativeTimeUnits(daysPassedInt);
+        
+        daysToYMD(daysPassedInt, avgDays);
         
         printDate(date1);
         dayOfWeek(a);
         
         printDate(date2);
         dayOfWeek(b);
-        
-        daysToYMD(daysPassedInt, avgDays);
-
-        alternativeTimeUnits(daysPassedInt);
     }
 
     return 0;
@@ -113,19 +105,27 @@ int main() {
 
 
 
+
 void readDate(struct date *x) {
     scanf("%d %d %d", &x->day, &x->month, &x->year);
 }
-
 
 void printDate(struct date x) {
     printf("%02d/%02d/%04d", x.day, x.month, x.year);
 }
 
-//do a scheme that covers for different cases
+
+
+
+
+
+
+
+
+
 int daysPassedFunct(struct date *date1, struct date *date2) {
     int daysPassed = 0;
-     printf("\n115\n");
+     printf("\n128\n");
  
  
 
@@ -140,7 +140,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
     }
 
-     printf("130 dp: %d\n", daysPassed);
+     printf("143 dp: %d\n", daysPassed);
      printf("checking years 1: %d\n", date1->year);
      printf("checking years 2: %d\n", date2->year);
 
@@ -354,14 +354,14 @@ int valiDate(struct date *x) {
 
 
 void dayOfWeek (int x) {
-     printf("365 x =: %d\n", x);  
+     printf("357 x =: %d\n", x);  
     if (x < 0) {
         x--;
         x = abs(x);
     }
     x %= 7;
     
-    printf("372 x =: %d\n", x);  
+    printf("364 x =: %d\n", x);  
 
     //switch if 1 - mon, etc.
     switch (x) {
@@ -402,17 +402,12 @@ void alternativeTimeUnits(int daysPassed) {
 }
 
 int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should account for both. use another int plusOrMinus to indicate that?
-    if (x > 0 && plusOrMinus > 0) { //need to do positive days++
-        
-    }
-    else if (x > 0 && plusOrMinus < 0) { //need to do positive days--
-        
-    } 
-    else if (x < 0 && plusOrMinus > 0) { //need to do negative days++
-        
-    }
-    else if (x < 0 && plusOrMinus < 0) { //need to do negative days--
-        
+    if (x > 0) {
+        return (plusOrMinus > 0) ? (x + 1) : (x - 1);
+    } else if (x < 0) {
+        return (plusOrMinus > 0) ? (x - 1) : (x + 1);
+    } else {
+        return -1;
     }
     //...or i can just use logic and math instead of this ^
 }
@@ -429,18 +424,12 @@ struct date temp = *date1;  // Create a temporary struct date to hold the values
 
 } 
 
-    /* add feature of swapping?
-    struct date *temp = date1;
-    date1 = date2;
-    date2 = temp;
-    */
 
-
-//!!! add fgets
+//!!! add fprintf
 
 //add count only workdays?
 
-//daystoymd divide dayspassed / 365*4+1
+//daystoymd divide dayspassed / 365*4+1 ?
 
 /*
 Solve sub-problem first:

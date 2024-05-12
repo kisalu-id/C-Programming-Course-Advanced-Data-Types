@@ -229,14 +229,14 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         } printf("229: %d\n", daysPassed);
     }
     
-/*    //!!!!!!!!!!!!!!!!!!!!!! do i need that????????????????
-    printf("226!!!!!!test: %d\n", daysPassed);
+    /*    //!!!!!!!!!!!!!!!!!!!!!! do i need that????????????????
+    printf("233!!!!!!test: %d\n", daysPassed);
     if (isLeapYear (date1->year) && (date1->year == date2->year) &&	((date2->day < 29 && date1->month == 2) || (date2->month == 1))     ) {//crutch for cases like 1.1.2024 - 1.2.2024
         daysPassed--;
-        printf("229!!!!!!SUBSTRACTED 1: %d\n", daysPassed);  
+        printf("236!!!!!!SUBSTRACTED 1: %d\n", daysPassed);  
     }
-    printf("231!!!!!!test: %d\n", daysPassed);   
-*/
+    printf("238!!!!!!test: %d\n", daysPassed);   
+    */
     
     if (isLeapYear(date2->year) && (date1->year != date2->year)) {
         if ((date2->day == 29 && date2->month == 2) || (date2->month > 2) || (date2->year > date1->year)) { //if end date is equal or after 29th Feb
@@ -409,7 +409,6 @@ int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should 
     } else {
         return -1;
     }
-    //...or i can just use logic and math instead of this ^
 }
 
 /* void swapDates (struct date *date1, struct date *date2) {
@@ -440,4 +439,26 @@ use same results to count which date of week both dates are
 edit pointers to daysPassed1 and daysPassed2
 do sum
 = daysPassed
+
+
+
+
+
+
+
+
+
+daysPassedFuncy should be 
+if (same date)
+else if (counter)
+else (d1>d2, swap)
+
+
+
+redo program, running daysPassed 3 times is better for design
 */
+
+
+// Language:C 
+// Copy the full code and open the CCoder APP to run it. 
+// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding

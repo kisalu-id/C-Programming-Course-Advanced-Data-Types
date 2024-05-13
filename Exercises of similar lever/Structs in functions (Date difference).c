@@ -31,7 +31,7 @@ int plusPlus(int, int);
 int main() {
     struct date date1, date2;
     float avgDays = averageDays();
-    int a, b, negative = 0;
+    int a, b, a2, b2, negative = 0;
     struct date *dateX = (struct date *)malloc(sizeof(struct date));
     //1 Jan 2024 is Monday
     dateX->day = 1;
@@ -72,13 +72,13 @@ int main() {
         b = daysPassedFunct(dateX, &date2);
         
         if (a<0) {
-            a = daysPassedFunct(dateX, &date1);       //I don't need to swap
+            a2 = daysPassedFunct(dateX, &date1);       //I don't need to swap
             negative += 1;                              //I'll need that for counting day of week
             printf("77 swapped a.....................\n\n");
             printf("Negative = %d\n", negative);
         }
         if (b<0) { 
-            b = daysPassedFunct(&date2, dateX);
+            b2 = daysPassedFunct(&date2, dateX);
             negative += 2;
             printf("82 swapped b.....................\n\n");
             printf("Negative = %d\n", negative);
@@ -122,7 +122,6 @@ void printDate(struct date x) {
 
 
 
-
 int daysPassedFunct(struct date *date1, struct date *date2) {
     int daysPassed = 0;
      printf("\n128\n");
@@ -132,122 +131,126 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     //case 1: same date
     if (date1->day == date2->day && date1->month == date2->month && date1->year == date2->year) {
         return daysPassed;
-    }
-
-    //diff day, same month, same year
-    if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {
-        daysPassed += date2->day - date1->day;
-        printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
-    }
-
-     printf("143 dp: %d\n", daysPassed);
-     printf("checking years 1: %d\n", date1->year);
-     printf("checking years 2: %d\n", date2->year);
-
-
-
-    //diff month, 1<2
-    if (date1->month < date2->month && date1->year <= date2->year) {
-        daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
-        for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
-            daysPassed += daysInMonth[monthi - 1];
-            printf("154 loop for months, dp: %d", daysPassed);
+    } //case 2: date1 < date2
+    else if ( (date1->day < date2->day && date1->month == date2->month && date1->year == date2->year) || (date1->month < date2->month && date1->year == date2->year) || (date1->year < date2->year) ) {
+    
+        //diff day, same month, same year
+        if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {
+            daysPassed += date2->day - date1->day;
+            printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
         }
-
-        printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
-        printf("158 checking years 1: %d\n", date1->year);
+    
+         printf("143 dp: %d\n", daysPassed);
+         printf("checking years 1: %d\n", date1->year);
+         printf("checking years 2: %d\n", date2->year);
+    
+    
+        //diff month, 1<2
+        if (date1->month < date2->month && date1->year <= date2->year) {
+            daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
+            for (int monthi = (date1->month + 1); monthi < date2->month; monthi++) { //if month difference is >1
+                daysPassed += daysInMonth[monthi - 1];
+                printf("154 loop for months, dp: %d", daysPassed);
+            }
+    
+            printf("daysPassed, counted months, entered loop 1: %d\n", daysPassed);
+            printf("158 checking years 1: %d\n", date1->year);
+            printf("checking years 2: %d\n", date2->year);
+    
+    
+    
+            /*
+            if (date1->year = date2->year) {
+                daysPassed -= 365;
+            } else {
+                daysPassed += 365;
+            }
+            */
+            printf("daysPassed, counted months, entered loop 1, dealt with years: %d\n", daysPassed);
+        }
+    
+    
+        printf("174 checking years 1: %d\n", date1->year);
         printf("checking years 2: %d\n", date2->year);
-
-
-
-        /*
-        if (date1->year = date2->year) {
-            daysPassed -= 365;
-        } else {
+    
+    
+        if (date1->year < date2->year) {
             daysPassed += 365;
         }
+    
+    
+        printf("183: %d\n", daysPassed);
+    
+        //diff month, 1>2
+        if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
+            daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
+           //count i times
+            for (int i = date1->month; i < 12; i++) { //if month difference is >1
+                daysPassed += daysInMonth[i];         //count until dec
+                //printf("daysPassed, loop2 count1: %d\n", daysPassed);
+            }
+    
+            for (int i = 1; i < date2->month; i++) { //count up to date
+                daysPassed += daysInMonth[i - 1];
+                //printf("daysPassed, loop2 count2: %d\n", daysPassed);
+            }
+    
+            printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);
+    
+    
+    
+            printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
+        }
+    
+        for (int yeari = (date1->year + 1); yeari <= (date2->year - 1); yeari++) { //for each year
+            //check for each year, if that's a leap year, if yes, add a leap day
+            if (isLeapYear(yeari)) {
+                daysPassed++; //create a function that will for a negative num do -- and for pos ++
+                leapYears++;
+            }
+            daysPassed += 365;
+            printf("!!!!!!Leapyears: %d\n", leapYears);
+        }
+        printf("215: %d\n", daysPassed);
+    
+    
+    
+    
+        printf("checking years 1: %d\n", date1->year);
+        printf("checking years 2: %d\n", date2->year);
+    
+    
+        //account for 29th Feb !!!!!!!!!!!!!!!!!!!!!!!!change to plusPlus funct
+        if (isLeapYear(date1->year)  && ((date1->day <= 29 && date1->month == 2) || (date1->month ==1))) { //if leap year && date1 before 29 Feb
+            if ((date2->day == 29 && date2->month == 2) || (date2->month >= 3) || (date2->year > date1->year)) { //if date2 is after or equal to 29th Feb
+                daysPassed++;
+                leapYears++;
+            } printf("229: %d\n", daysPassed);
+        }
+        
+        /*    //!!!!!!!!!!!!!!!!!!!!!! do i need that????????????????
+        printf("233!!!!!!test: %d\n", daysPassed);
+        if (isLeapYear (date1->year) && (date1->year == date2->year) &&	((date2->day < 29 && date1->month == 2) || (date2->month == 1))     ) {//crutch for cases like 1.1.2024 - 1.2.2024
+            daysPassed--;
+            printf("236!!!!!!SUBSTRACTED 1: %d\n", daysPassed);  
+        }
+        printf("238!!!!!!test: %d\n", daysPassed);   
         */
-        printf("daysPassed, counted months, entered loop 1, dealt with years: %d\n", daysPassed);
-    }
-
-
-    printf("174 checking years 1: %d\n", date1->year);
-    printf("checking years 2: %d\n", date2->year);
-
-
-    if (date1->year < date2->year) {
-        daysPassed += 365;
-    }
-
-
-    printf("183: %d\n", daysPassed);
-
-    //diff month, 1>2
-    if (date1->month > date2->month && date1->year < date2->year) { //year1 is strictly more than year2
-        daysPassed += daysInMonth[date1->month -1] - date1->day + date2->day;
-       //count i times
-        for (int i = date1->month; i < 12; i++) { //if month difference is >1
-            daysPassed += daysInMonth[i];         //count until dec
-            //printf("daysPassed, loop2 count1: %d\n", daysPassed);
+        
+        if (isLeapYear(date2->year) && (date1->year != date2->year)) {
+            if ((date2->day == 29 && date2->month == 2) || (date2->month > 2) || (date2->year > date1->year)) { //if end date is equal or after 29th Feb
+                daysPassed++;
+                leapYears++;
+            }
         }
-
-        for (int i = 1; i < date2->month; i++) { //count up to date
-            daysPassed += daysInMonth[i - 1];
-            //printf("daysPassed, loop2 count2: %d\n", daysPassed);
-        }
-
-        printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);
-
-
-
-        printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
-    }
-
-    for (int yeari = (date1->year + 1); yeari <= (date2->year - 1); yeari++) { //for each year
-        //check for each year, if that's a leap year, if yes, add a leap day
-        if (isLeapYear(yeari)) {
-            daysPassed++; //create a function that will for a negative num do -- and for pos ++
-            leapYears++;
-        }
-        daysPassed += 365;
-        printf("!!!!!!Leapyears: %d\n", leapYears);
-    }
-    printf("215: %d\n", daysPassed);
-
-
-
-
-    printf("checking years 1: %d\n", date1->year);
-    printf("checking years 2: %d\n", date2->year);
-
-
-    //account for 29th Feb !!!!!!!!!!!!!!!!!!!!!!!!change to plusPlus funct
-    if (isLeapYear(date1->year)  && ((date1->day <= 29 && date1->month == 2) || (date1->month ==1))) { //if leap year && date1 before 29 Feb
-        if ((date2->day == 29 && date2->month == 2) || (date2->month >= 3) || (date2->year > date1->year)) { //if date2 is after or equal to 29th Feb
-            daysPassed++;
-            leapYears++;
-        } printf("229: %d\n", daysPassed);
-    }
     
-    /*    //!!!!!!!!!!!!!!!!!!!!!! do i need that????????????????
-    printf("233!!!!!!test: %d\n", daysPassed);
-    if (isLeapYear (date1->year) && (date1->year == date2->year) &&	((date2->day < 29 && date1->month == 2) || (date2->month == 1))     ) {//crutch for cases like 1.1.2024 - 1.2.2024
-        daysPassed--;
-        printf("236!!!!!!SUBSTRACTED 1: %d\n", daysPassed);  
-    }
-    printf("238!!!!!!test: %d\n", daysPassed);   
-    */
     
-    if (isLeapYear(date2->year) && (date1->year != date2->year)) {
-        if ((date2->day == 29 && date2->month == 2) || (date2->month > 2) || (date2->year > date1->year)) { //if end date is equal or after 29th Feb
-            daysPassed++;
-            leapYears++;
-        }
+        printf("249 daysPassed, counted years: %d\n", daysPassed);
+        return daysPassed;
     }
-
-
-    printf("249 daysPassed, counted years: %d\n", daysPassed);
-    return daysPassed;
+    else {
+        return -1; //
+    }
 }
 
 
@@ -411,17 +414,6 @@ int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should 
     }
 }
 
-/* void swapDates (struct date *date1, struct date *date2) {
-struct date temp = *date1;  // Create a temporary struct date to hold the values of date1
-*date1 = *date2;            // Assign the values of date2 to date1
-*date2 = temp; 
-
-    printf("\nSWAPDATES The first date: ");
-    printDate(*date1);
-    printf("\nSWAPDATESThe second date: ");
-    printDate(*date2);
-
-} 
 
 
 //!!! add fprintf
@@ -431,18 +423,16 @@ struct date temp = *date1;  // Create a temporary struct date to hold the values
 //daystoymd divide dayspassed / 365*4+1 ?
 
 /*
-Solve sub-problem first:
+
+how can i do the program:
+1. Redo program, running daysPassed 3 times is better for design
+2. Redo, do loop through daysInMonth
+3. Solve sub-problem first:
 in daysPassedFunct count how much days passed between date1 and dateX (1 Jan 2024, Mon)
 and between 1 Jan 2024 and date2
 return sum for the main function, handle negative nums differently?
 use same results to count which date of week both dates are
-edit pointers to daysPassed1 and daysPassed2
-do sum
-= daysPassed
-
-
-
-
+edit pointers to daysPassed1 and daysPassed2; do sum = daysPassed
 
 
 
@@ -458,7 +448,3 @@ else (d1>d2, swap)
 redo program, running daysPassed 3 times is better for design
 */
 
-
-// Language:C 
-// Copy the full code and open the CCoder APP to run it. 
-// CCoder APP download link：https://play.google.com/store/apps/details?id=com.ikou.ccoding

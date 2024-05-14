@@ -16,6 +16,7 @@ int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 int leapYears = 0;
 
+
 void printDate(struct date);
 void readDate(struct date *);
 int daysPassedFunct(struct date *, struct date *);
@@ -31,7 +32,7 @@ int plusPlus(int, int);
 int main() {
     struct date date1, date2;
     float avgDays = averageDays();
-    int a, b, a2, b2, negative = 0;
+    int a, b, a2, b2;
     struct date *dateX = (struct date *)malloc(sizeof(struct date));
     //1 Jan 2024 is Monday
     dateX->day = 1;
@@ -64,13 +65,14 @@ int main() {
             }
         }
         
-        /* //here do swap funct!!! then it will make sense to make a and b positive
-        if (date1 > date2)
-        swapDates (struct date *date1, struct date *date2) {} */
+
+        
+
+        
         
         a = daysPassedFunct(&date1, dateX); //make it positive
         b = daysPassedFunct(dateX, &date2);
-        
+        /*
         if (a<0) {
             a2 = daysPassedFunct(dateX, &date1);       //I don't need to swap
             negative += 1;                              //I'll need that for counting day of week
@@ -82,9 +84,8 @@ int main() {
             negative += 2;
             printf("82 swapped b.....................\n\n");
             printf("Negative = %d\n", negative);
-        }
+        } */
         
-        //here I need negative numbers, but in daysPassedFunct I need positive ideally, order?
         int daysPassedInt = a + b;
 
         printf("\n\nBetween these dates passed: %d days\n", daysPassedInt);
@@ -137,10 +138,10 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
         //diff day, same month, same year
         if (date1->day != date2->day && date1->month == date2->month && date1->year == date2->year) {
             daysPassed += date2->day - date1->day;
-            printf("daysPassed, counted days (if same m same d): %d\n", daysPassed);
+            printf("141 daysPassed, counted days (if same m same d): %d\n", daysPassed);
         }
     
-         printf("143 dp: %d\n", daysPassed);
+         printf("144 dp: %d\n", daysPassed);
          printf("checking years 1: %d\n", date1->year);
          printf("checking years 2: %d\n", date2->year);
     
@@ -159,13 +160,13 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
     
     
     
-            /*
-            if (date1->year = date2->year) {
-                daysPassed -= 365;
-            } else {
-                daysPassed += 365;
-            }
-            */
+
+
+            
+
+
+
+            
             printf("daysPassed, counted months, entered loop 1, dealt with years: %d\n", daysPassed);
         }
     
@@ -195,11 +196,17 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
                 //printf("daysPassed, loop2 count2: %d\n", daysPassed);
             }
     
-            printf("daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);
+            printf("199 daysPassed,counted months, entered loop 2 where m1>m2: %d\n", daysPassed);
     
     
     
-            printf("daysPassed,counted months + crutch; %d\n", daysPassed) ;
+
+        }
+        
+        //same month, 1==2  !!!!!!!!!!!!!!!!!!! duplicate 139-141
+        if (date1->month == date2->month && date1->year < date2->year) {
+            daysPassed += date2->day - date1->day;
+            printf("209: %d\n", daysPassed);
         }
     
         for (int yeari = (date1->year + 1); yeari <= (date2->year - 1); yeari++) { //for each year
@@ -209,10 +216,9 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
                 leapYears++;
             }
             daysPassed += 365;
-            printf("!!!!!!Leapyears: %d\n", leapYears);
+            printf("2018 !!!!!!Leapyears: %d\n", leapYears);
         }
-        printf("215: %d\n", daysPassed);
-    
+        printf("221: %d\n", daysPassed);
     
     
     
@@ -225,7 +231,7 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
             if ((date2->day == 29 && date2->month == 2) || (date2->month >= 3) || (date2->year > date1->year)) { //if date2 is after or equal to 29th Feb
                 daysPassed++;
                 leapYears++;
-            } printf("229: %d\n", daysPassed);
+            } printf("234: %d\n", daysPassed);
         }
         
         /*    //!!!!!!!!!!!!!!!!!!!!!! do i need that????????????????
@@ -241,15 +247,17 @@ int daysPassedFunct(struct date *date1, struct date *date2) {
             if ((date2->day == 29 && date2->month == 2) || (date2->month > 2) || (date2->year > date1->year)) { //if end date is equal or after 29th Feb
                 daysPassed++;
                 leapYears++;
+                printf("250: %d\n", daysPassed);
             }
         }
     
-    
-        printf("249 daysPassed, counted years: %d\n", daysPassed);
+        printf("254 daysPassed, counted years: %d\n", daysPassed);
         return daysPassed;
     }
     else {
-        return -1; //
+        daysPassed = daysPassedFunct(date2, date1);
+        printf("daysPassed RECURSION 259 daysPassed: %d\n", daysPassed);
+        return daysPassed * -1;
     }
 }
 
@@ -356,38 +364,41 @@ int valiDate(struct date *x) {
 }
 
 
-void dayOfWeek (int x) {
-     printf("357 x =: %d\n", x);  
-    if (x < 0) {
-        x--;
-        x = abs(x);
-    }
+void dayOfWeek(int x) {
+    // Adjust x to ensure it's within the range 0-6
+    printf("\n369 initial x =: %d\n", x);  
     x %= 7;
+    printf("371 mod x =: %d\n", x);  
+    // If x is negative, adjust it to a positive value
+    if (x < 0) {
+        //x = 7 + x; // mess with 7 to make x positive
+        x = abs(x);
+        printf("376 dealing with negative x =: %d\n", x);  
+    } 
     
-    printf("364 x =: %d\n", x);  
 
     //switch if 1 - mon, etc.
     switch (x) {
         case 0:
-            printf(" is Sunday.\n");
-            break;
-        case 1:
             printf(" is Monday.\n");
             break;
-        case 2:
+        case 1:
             printf(" is Tuesday.\n");
             break;
-        case 3:
+        case 2:
             printf(" is Wednesday.\n");
             break;
-        case 4:
+        case 3:
             printf(" is Thursday.\n");
             break;
-         case 5:
+         case 4:
             printf(" is Friday.\n");
             break;
-         case 6:
+         case 5:
             printf(" is Saturday.\n");
+            break;
+        case 6:
+            printf(" is Sunday.\n");
             break;
         default:
             fprintf(stderr, "Error in detecting dayOfWeek2\n");
@@ -414,8 +425,6 @@ int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should 
     }
 }
 
-
-
 //!!! add fprintf
 
 //add count only workdays?
@@ -423,7 +432,6 @@ int plusPlus(int x, int plusOrMinus) { //it could be pays++ or days--, i should 
 //daystoymd divide dayspassed / 365*4+1 ?
 
 /*
-
 how can i do the program:
 1. Redo program, running daysPassed 3 times is better for design
 2. Redo, do loop through daysInMonth
@@ -433,18 +441,5 @@ and between 1 Jan 2024 and date2
 return sum for the main function, handle negative nums differently?
 use same results to count which date of week both dates are
 edit pointers to daysPassed1 and daysPassed2; do sum = daysPassed
-
-
-
-
-
-daysPassedFuncy should be 
-if (same date)
-else if (counter)
-else (d1>d2, swap)
-
-
-
 redo program, running daysPassed 3 times is better for design
 */
-
